@@ -5,7 +5,20 @@
 <meta name = "Program Name" content = "Positron">
 <meta name = "Version" content = "0.1">
 <meta name = "Author" content = "Korry Luke">
+
 <script>
+function init()	{
+	var currentTime = new Date();
+	var hrs = currentTime.getHours();
+	var min = currentTime.getMinutes();
+	var sec = currentTime.getSeconds();
+	var min = normalize(min);
+	var sec = normalize(sec);
+
+	document.getElementById('clock').innerHTML = hrs + ":" + min + ":" + sec;
+	var timeout = setTimeout(function() {init()}, 500);
+}
+
 function normalize(time)  {
 	if(time < 10) { time = "0" + time};
 	return time;
