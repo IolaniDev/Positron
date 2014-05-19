@@ -24,7 +24,7 @@ function init()	{
 
 
 
-	document.getElementById('clock').innerHTML = hrs + ":" + min + ":" + sec + " " + meridiem;
+	document.getElementById('clock').innerHTML = "It is now " + hrs + ":" + min + ":" + sec + " " + meridiem + ".";
 	var timeout = setTimeout(function() {init()}, 500);
 }
 
