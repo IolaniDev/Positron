@@ -10,6 +10,10 @@
 function init()	{
 	var militaryTime = false;
 	var currentTime = new Date();
+	var mon = currentTime.getMonth();
+	var wkday = currentTime.getDay();
+	var date = currentTime.getDate();
+	var yr = currentTime.getFullYear();
 	var hrs = currentTime.getHours();
 	var min = currentTime.getMinutes();
 	var sec = currentTime.getSeconds();
