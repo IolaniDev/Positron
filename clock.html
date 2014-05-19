@@ -8,14 +8,22 @@
 
 <script>
 function init()	{
+	var militaryTime = false;
 	var currentTime = new Date();
 	var hrs = currentTime.getHours();
 	var min = currentTime.getMinutes();
 	var sec = currentTime.getSeconds();
 	var min = normalize(min);
 	var sec = normalize(sec);
+	var meridiem = "";
+	if(!militaryTime)	{
+		meridiem = (hrs < 12) ? "AM" : "PM";
+		hrs = (hrs > 12) ? (hrs - 12) : hrs;
+	}
 
-	document.getElementById('clock').innerHTML = hrs + ":" + min + ":" + sec;
+
+
+	document.getElementById('clock').innerHTML = hrs + ":" + min + ":" + sec + " " + meridiem;
 	var timeout = setTimeout(function() {init()}, 500);
 }
 
