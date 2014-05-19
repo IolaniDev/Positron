@@ -19,6 +19,7 @@ function init()	{
 	if(!militaryTime)	{
 		meridiem = (hrs < 12) ? "AM" : "PM";
 		hrs = (hrs > 12) ? (hrs - 12) : hrs;
+		hrs = (hrs == 0) ? (12) : hrs;
 	}
 
 
