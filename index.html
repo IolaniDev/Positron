@@ -7,6 +7,11 @@
 <meta name = "Author" content = "Korry Luke">
 
 <script type = "text/javascript">
+var host = "iolanidev.github.io";
+if((host == window.location.host) && (window.location.protocol != "https:"))	{
+	window.location.protocol = "https";
+}
+
 function init()	{
 	var militaryTime = false;
 	var currentTime = new Date();
