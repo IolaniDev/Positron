@@ -32,7 +32,6 @@ function init()	{
 
 	document.getElementById('clock').innerHTML = "It is now " + hrs + ":" + min + ":" + sec + " " + meridiem + ".";
 	document.getElementById('calendar').innerHTML = "Today is " + wkday + ", " + mon + " " + date + ", " + yr + ".";
-	var timeout = setTimeout(function() {init()}, 500);
 }
 
 function normalize(time)  {
@@ -74,7 +73,7 @@ function dayToString(day)	{
 </script>
 </head>
 
-<body onload = "init()">
+<body onload = 'init(); setInterval("init()", 500)'>
 
 <table align = 'center'>
 <tr><td>&nbsp;</td></tr>
