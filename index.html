@@ -59,6 +59,31 @@ var host = "iolanidev.github.io";
 if((host == window.location.host) && (window.location.protocol != "https:"))	{
 	window.location.protocol = "https";
 }
+// Load schedule
+var periods = [
+new Date(2014, 4, 21, 7, 50),
+new Date(2014, 4, 21, 8, 34),
+new Date(2014, 4, 21, 8, 39),
+new Date(2014, 4, 21, 9, 23),
+new Date(2014, 4, 21, 9, 28),
+new Date(2014, 4, 21, 10, 12),
+new Date(2014, 4, 21, 10, 17),
+new Date(2014, 4, 21, 11, 01),
+new Date(2014, 4, 21, 11, 06),
+new Date(2014, 4, 21, 11, 50),
+new Date(2014, 4, 21, 12, 38),
+new Date(2014, 4, 21, 13, 22),
+new Date(2014, 4, 21, 13, 27),
+new Date(2014, 4, 21, 14, 11),
+new Date(2014, 4, 21, 14, 16),
+new Date(2014, 4, 21, 15, 00),
+];
+var nextEventIndex = 0;
+
+while (now > periods[nextEventIndex]){
+nextEventIndex++;
+}
+
 function init ( )
 {
   timeDisplay = document.createTextNode ( "" );
@@ -71,6 +96,7 @@ function init ( )
 
 function updateClock ( )
 {
+
   var currentTime	= new Date ( );
   var currentHours	= currentTime.getHours ( );
   var currentMinutes	= currentTime.getMinutes ( );
@@ -80,6 +106,10 @@ function updateClock ( )
   var currentYear	= currentTime.getFullYear ( );
   var currentDOW		= currentTime.getDay ( );
  
+ //Determine nextEventIndex
+ while (currentTime > periods[nextEventIndex]){
+nextEventIndex ++;
+}
   // Pad the minutes and seconds with leading zeros, if required
   currentFormattedMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
   currentFormattedSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
@@ -120,7 +150,34 @@ function updateClock ( )
   if (currentDOW == 5) { currentDayOfWeek = "Friday" };
   if (currentDOW == 6) { currentDayOfWeek = "Saturday" };
  
+ //Calculate time left
+   
+	timeLeft = periods[nextEventIndex] - currentTime;
+	minutesLeft = Math.round(timeLeft/60000);
+ 
+  
+  //Calculate next Event period number
+  switch (nextEventIndex)	{
+		case 0 : period = 7; word = "start"; break;
+		case 1 : period = 7; word = "end"; break;
+		case 2 : period = 8; word = "start"; break
+		case 3 : period = 8; word = "end"; break;
+		case 4 : period = 1; word = "start"; break;
+		case 5 : period = 1; word = "end"; break;
+		case 6 : period = 2; word = "start"; break;
+		case 7 : period = 2; word = "end"; break;
+		case 8 : period = 5; word = "start"; break;
+		case 9 : period = 5; word = "end"; break;
+		case 10 :period = 6; word = "start"; break;
+		case 11 :period = 6; word = "end"; break;
+		case 12 :period = 3; word = "start"; break;
+		case 13 :period = 3; word = "end"; break;
+		case 14 :period = 4; word = "start"; break;
+		case 15 :period = 4; word = "end"; break;
+	}
+  
   // Compose the string for display
+  var currentScrollerString = minutesLeft + " minutes to " + word + " of Period " + period;
   var currentTimeString = currentHours + ":" + currentFormattedMinutes + ":" + currentFormattedSeconds + " " + AMPM;
  var currentCycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule;
   // Compose the string for display
@@ -128,14 +185,16 @@ function updateClock ( )
  
   // Compose the string for display
   var currentDateString = currentDayOfWeek + ", " + currentMonthName + " " + currentDate + ", " + currentYear;
- var currentPeriodString = minToEnd + "minutes left in Period " + periodEnd;
+ 
   // Update the time display
   document.getElementById("Clock").firstChild.nodeValue = currentTimeString;
   //document.getElementById("ISOcalendar").firstChild.nodeValue = currentISODateString;
   document.getElementById("calendar").firstChild.nodeValue = currentDateString;
   //document.getElementById("DayOfWeek").firstChild.nodeValue = currentDayOfWeek;
-  document.getElementById("scroller").firstChild.nodeValue =  currentPeriodString; 
+  document.getElementById("scroller").firstChild.nodeValue =  currentScrollerString; 
   document.getElementById("cycleSchedule").firstChild.nodeValue =  currentCycleScheduleString;
+  
+
 } 
 // -->
 </script>
@@ -147,7 +206,7 @@ function updateClock ( )
 <TR><TD id="Clock">&nbsp;</TD></TR>
 <TR><TD id="DayOfWeek">&nbsp;</TD></TR>
 <TR><TD>&nbsp;</TD></TR>
-<TR><TD><marquee behavior="scroll" scrollamount="3" scrolldelay="1" id="scroller">&nbsp;<marquee></TD></TR>
+<TR><TD><marquee behavior="scroll" scrollamount="5" scrolldelay="0" id="scroller">&nbsp;<marquee></TD></TR>
 </TABLE>
 </BODY>
 </HTML>
