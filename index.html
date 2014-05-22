@@ -28,6 +28,15 @@ var periods = [
 ];
 
 function init()	{
+	timeDisplay = document.createTextNode("");
+	document.getElementById("Clock").appendChild(timeDisplay);
+	document.getElementById("ISOcalendar").appendChild(timeDisplay);
+	document.getElementById("calendar").appendChild(timeDisplay);
+	document.getElementById("scroller").appendChild(timeDisplay);
+	document.getElementById("cycleSchedule").appendChild(timeDisplay);
+}
+
+function updateClock()	{
 	var militaryTime = false;
 	var currentTime = new Date();
 	var mon = currentTime.getMonth();
@@ -93,7 +102,7 @@ function dayToString(day)	{
 </script>
 </head>
 
-<body onload = 'init(); setInterval("init()", 500)'>
+<body onload = 'updateClock(); setInterval("updateClock()", 500)'>
 
 <table align = 'center'>
 <tr><td>&nbsp;</td></tr>
