@@ -1,18 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 <title>'Iolani Positron Clock</title>
 <meta name = "Program Name" content = "Positron">
 <meta name = "Version" content = "0.1">
 <meta name = "Author" content = "Korry Luke">
+<style type = "text/css">
+	BODY {
+		margin-top: 10px;
+		padding: 10px;
+		background-color: black;
+		border: 0px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	}
+	#clock	{
+		font-size: 12em;
+		font-weight: bold;
+		color: gray;
+		text-align : center;
+	}
+	#calendar	{
+		font-size: 5em;
+		color: white;
+		text-align: center;
+	}
+	#cycleSchedule	{
+		font-size: 5em;
+		color: red;
+		text-align: center;
+	}
+	marquee	{
+		color: red;
+		font-size: 3em;
+	}
+</style>
 
 <script type = "text/javascript">
 var host = "iolanidev.github.io";
 if((host == window.location.host) && (window.location.protocol != "https:"))	{
 	window.location.protocol = "https";
 }
+// Load schedule
+var periods = [
+	new Date(2014, 4, 21, 7, 50),
+	new Date(2014, 4, 21, 8, 34),
+	new Date(2014, 4, 21, 8, 39),
+	new Date(2014, 4, 21, 9, 23),
+	new Date(2014, 4, 21, 9, 28),
+	new Date(2014, 4, 21, 10, 12),
+	new Date(2014, 4, 21, 10, 17),
+	new Date(2014, 4, 21, 11, 01),
+	new Date(2014, 4, 21, 11, 06),
+	new Date(2014, 4, 21, 11, 50),
+	new Date(2014, 4, 21, 12, 38),
+	new Date(2014, 4, 21, 13, 22),
+	new Date(2014, 4, 21, 13, 27),
+	new Date(2014, 4, 21, 14, 11),
+	new Date(2014, 4, 21, 14, 16),
+	new Date(2014, 4, 21, 15, 00),
+];
 
 function init()	{
+	timeDisplay = document.createTextNode("");
+	document.getElementById("Clock").appendChild(timeDisplay);
+	document.getElementById("ISOcalendar").appendChild(timeDisplay);
+	document.getElementById("calendar").appendChild(timeDisplay);
+	document.getElementById("scroller").appendChild(timeDisplay);
+	document.getElementById("cycleSchedule").appendChild(timeDisplay);
+}
+
+function updateClock()	{
 	var militaryTime = false;
 	var currentTime = new Date();
 	var mon = currentTime.getMonth();
@@ -27,16 +85,54 @@ function init()	{
 	var min = normalize(min);
 	var sec = normalize(sec);
 	var meridiem = "";
+	var nextEventIndex = 0;
 	if(!militaryTime)	{
 		meridiem = (hrs < 12) ? "AM" : "PM";
 		hrs = (hrs > 12) ? (hrs - 12) : hrs;
 		hrs = (hrs == 0) ? (12) : hrs;
 	}
+	//Determine nextEventIndex
+	while (currentTime > periods[nextEventIndex])	{
+		nextEventIndex ++;
+	}
+	currentCycle = 7;
+	currentSchedule = "Basic"
+	//Calculate time left
+	timeLeft = periods[nextEventIndex] - currentTime;
+	minutesLeft = Math.round(timeLeft / 60000);
+	//Calculate next Event period number
+	var word = "";
+	var period = -1;
+	switch (nextEventIndex)	{
+		case 0 : period = 7; word = "start"; break;
+		case 1 : period = 7; word = "end"; break;
+		case 2 : period = 8; word = "start"; break
+		case 3 : period = 8; word = "end"; break;
+		case 4 : period = 1; word = "start"; break;
+		case 5 : period = 1; word = "end"; break;
+		case 6 : period = 2; word = "start"; break;
+		case 7 : period = 2; word = "end"; break;
+		case 8 : period = 5; word = "start"; break;
+		case 9 : period = 5; word = "end"; break;
+		case 10 :period = 6; word = "start"; break;
+		case 11 :period = 6; word = "end"; break;
+		case 12 :period = 3; word = "start"; break;
+		case 13 :period = 3; word = "end"; break;
+		case 14 :period = 4; word = "start"; break;
+		case 15 :period = 4; word = "end"; break;
+		} 
 
+	var scrollerString = (sec > 1) ? (minutesLeft + " minutes to " + word + " of Period " + period) : (minutesLeft + "minute to " + word + " of Period " + period);
+	var timeString = hrs + ":" + min + ":" + sec + " " + meridiem;
+	var cycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule; 
+	// Compose the string for display
+	var dateString = wkday + ", " + mon + " " + date + ", " + yr;
 
-
-	document.getElementById('clock').innerHTML = "It is now " + hrs + ":" + min + ":" + sec + " " + meridiem + ".";
-	document.getElementById('calendar').innerHTML = "Today is " + wkday + ", " + mon + " " + date + ", " + yr + ".";
+	// Update the time display
+	document.getElementById("clock").firstChild.nodeValue = timeString;
+	document.getElementById("calendar").firstChild.nodeValue = dateString;
+	document.getElementById("scroller").firstChild.nodeValue =  scrollerString; 
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  cycleScheduleString;
 }
 
 function normalize(time)  {
@@ -78,13 +174,16 @@ function dayToString(day)	{
 </script>
 </head>
 
-<body onload = 'init(); setInterval("init()", 500)'>
+<body onload = 'updateClock(); setInterval("updateClock()", 500)'>
 
 <table align = 'center'>
 <tr><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td id = "clock";></td></tr>
-<tr><td id = "calendar";></td></tr>
-
+<tr><td id = "calendar">&nbsp;</td></tr>
+<tr><td id = "cycleSchedule">&nbsp;</td></tr>
+<tr><td id = "clock">&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td><marquee behavior = "scroll" scrollAmt = "5" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
+</table>
 </body>
 </html>
