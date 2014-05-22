@@ -123,6 +123,7 @@ function updateClock()	{
 		} 
 
 	var scrollerString = (sec > 1) ? (minutesLeft + " minutes to " + word + " of Period " + period) : (minutesLeft + "minute to " + word + " of Period " + period);
+	var scrollerString = (!isNaN(timeLeft)) ? (scrollerString) : ("School's over!");
 	var timeString = hrs + ":" + min + ":" + sec + " " + meridiem;
 	var cycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule; 
 	// Compose the string for display
