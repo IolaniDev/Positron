@@ -51,12 +51,48 @@ function updateClock()	{
 	var min = normalize(min);
 	var sec = normalize(sec);
 	var meridiem = "";
+	var nextEventIndex = 0;
 	if(!militaryTime)	{
 		meridiem = (hrs < 12) ? "AM" : "PM";
 		hrs = (hrs > 12) ? (hrs - 12) : hrs;
 		hrs = (hrs == 0) ? (12) : hrs;
 	}
+	//Determine nextEventIndex
+	while (currentTime > periods[nextEventIndex])	{
+		nextEventIndex ++;
+	}
+	currentCycle = 7;
+	currentSchedule = "Basic"
+	//Calculate time left
+	timeLeft = periods[nextEventIndex] - currentTime;
+	minutesLeft = Math.round(timeLeft / 60000);
+	//Calculate next Event period number
+	var word = "";
+	var period = -1;
+	switch (nextEventIndex)	{
+		case 0 : period = 7; word = "start"; break;
+		case 1 : period = 7; word = "end"; break;
+		case 2 : period = 8; word = "start"; break
+		case 3 : period = 8; word = "end"; break;
+		case 4 : period = 1; word = "start"; break;
+		case 5 : period = 1; word = "end"; break;
+		case 6 : period = 2; word = "start"; break;
+		case 7 : period = 2; word = "end"; break;
+		case 8 : period = 5; word = "start"; break;
+		case 9 : period = 5; word = "end"; break;
+		case 10 :period = 6; word = "start"; break;
+		case 11 :period = 6; word = "end"; break;
+		case 12 :period = 3; word = "start"; break;
+		case 13 :period = 3; word = "end"; break;
+		case 14 :period = 4; word = "start"; break;
+		case 15 :period = 4; word = "end"; break;
+		} 
 
+	var scrollerString = (sec > 1) ? (minutesLeft + " minutes to " + word + " of Period " + period) : (minutesLeft + "minute to " + word + " of Period " + period);
+	var timeString = hrs + ":" + min + ":" + sec + " " + meridiem;
+	var cycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule; 
+	// Compose the string for display
+	var dateString = wkday + ", " + mon + " " + date + ", " + yr;
 
 
 	document.getElementById('clock').innerHTML = "It is now " + hrs + ":" + min + ":" + sec + " " + meridiem + ".";
