@@ -5,159 +5,101 @@
 <meta name = "Program Name" content = "Positron">
 <meta name = "Version" content = "0.1">
 <meta name = "Author" content = "Korry Luke">
-
-<style type="text/css">
-/* Define the screen */
-BODY {
-	Margin-Top:			10px;
-	Padding:			10px;
-	Background-Color:	Black;
-	Border:				0px;
-	Font-family: 		Arial, Helvetica, sans-serif;
-	Text-Align:			Center;
-}
- 
-#Clock {
-	Font-size:			12em;
- Font-weight:		Bold;
-	Color:				White;
-	Text-Align:			Center;
-}
- 
-#calendar {
-	Font-size: 			5em;
-	Color:				Yellow;
-	Text-Align:			Center;
-}
- 
-#ISOcalendar {
-	Font-size: 			3em;
-	Color:				Yellow;
-	Text-Align:			Center;
-}
- 
-#DayOfWeek {
-	Font-size: 			5em;
-	Color:				Yellow;
-	Text-Align:			Center;
-}
- 
- #cycleSchedule {
-	Font-size: 			5em;
-	Color:				Yellow;
-	Text-Align:			Center;
+<style type = "text/css">
+	BODY {
+		margin-top: 10px;
+		padding: 10px;
+		background-color: black;
+		border: 0px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
 	}
-	
-marquee {color: white;
+	#clock	{
+		font-size: 12em;
+		font-weight: bold;
+		color: gray;
+		text-align : center;
+	}
+	#calendar	{
+		font-size: 5em;
+		color: white;
+		text-align: center;
+	}
+	#cycleSchedule	{
+		font-size: 5em;
+		color: red;
+		text-align: center;
+	}
+	marquee	{
+		color: red;
 		font-size: 3em;
-}
-
+	}
 </style>
 
 <script type = "text/javascript">
-var host = "iolanidev.github.io";
-if((host == window.location.host) && (window.location.protocol != "https:"))	{
-	window.location.protocol = "https";
-}
 // Load schedule
 var periods = [
-new Date(2014, 4, 21, 7, 50),
-new Date(2014, 4, 21, 8, 34),
-new Date(2014, 4, 21, 8, 39),
-new Date(2014, 4, 21, 9, 23),
-new Date(2014, 4, 21, 9, 28),
-new Date(2014, 4, 21, 10, 12),
-new Date(2014, 4, 21, 10, 17),
-new Date(2014, 4, 21, 11, 01),
-new Date(2014, 4, 21, 11, 06),
-new Date(2014, 4, 21, 11, 50),
-new Date(2014, 4, 21, 12, 38),
-new Date(2014, 4, 21, 13, 22),
-new Date(2014, 4, 21, 13, 27),
-new Date(2014, 4, 21, 14, 11),
-new Date(2014, 4, 21, 14, 16),
-new Date(2014, 4, 21, 15, 00),
+	new Date(2014, 4, 21, 7, 50),
+	new Date(2014, 4, 21, 8, 34),
+	new Date(2014, 4, 21, 8, 39),
+	new Date(2014, 4, 21, 9, 23),
+	new Date(2014, 4, 21, 9, 28),
+	new Date(2014, 4, 21, 10, 12),
+	new Date(2014, 4, 21, 10, 17),
+	new Date(2014, 4, 21, 11, 01),
+	new Date(2014, 4, 21, 11, 06),
+	new Date(2014, 4, 21, 11, 50),
+	new Date(2014, 4, 21, 12, 38),
+	new Date(2014, 4, 21, 13, 22),
+	new Date(2014, 4, 21, 13, 27),
+	new Date(2014, 4, 21, 14, 11),
+	new Date(2014, 4, 21, 14, 16),
+	new Date(2014, 4, 21, 15, 00),
 ];
-var nextEventIndex = 0;
 
-while (now > periods[nextEventIndex]){
-nextEventIndex++;
+function init()	{
+	timeDisplay = document.createTextNode("");
+	document.getElementById("Clock").appendChild(timeDisplay);
+	document.getElementById("ISOcalendar").appendChild(timeDisplay);
+	document.getElementById("calendar").appendChild(timeDisplay);
+	document.getElementById("scroller").appendChild(timeDisplay);
+	document.getElementById("cycleSchedule").appendChild(timeDisplay);
 }
 
-function init ( )
-{
-  timeDisplay = document.createTextNode ( "" );
-  document.getElementById("Clock").appendChild ( timeDisplay );
-  document.getElementById("ISOcalendar").appendChild ( timeDisplay );
-  document.getElementById("calendar").appendChild ( timeDisplay );
-  document.getElementById("scroller").appendChild ( timeDisplay );
-  document.getElementById("cycleSchedule").appendChild ( timeDisplay );
-}
-
-function updateClock ( )
-{
-
-  var currentTime	= new Date ( );
-  var currentHours	= currentTime.getHours ( );
-  var currentMinutes	= currentTime.getMinutes ( );
-  var currentSeconds	= currentTime.getSeconds ( );
-  var currentDate	= currentTime.getDate ( );
-  var currentMonth	= currentTime.getMonth ( ) + 1;
-  var currentYear	= currentTime.getFullYear ( );
-  var currentDOW		= currentTime.getDay ( );
- 
- //Determine nextEventIndex
- while (currentTime > periods[nextEventIndex]){
-nextEventIndex ++;
-}
-  // Pad the minutes and seconds with leading zeros, if required
-  currentFormattedMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
-  currentFormattedSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
- 
-  // Pad the date and month with leading zeros, if required
-  currentFormattedDate 	= ( currentDate  < 10 ? "0" : "" ) + currentDate;
-  currentFormattedMonth	= ( currentMonth < 10 ? "0" : "" ) + currentMonth;
- 
-  // Choose either "AM" or "PM" as appropriate
-  var AMPM	= ( currentHours < 12 ) ? "AM" : "PM";
- 
-  // Convert the hours component to 12-hour format if needed
-  currentHours	= ( currentHours > 12 ) ? currentHours - 12 : currentHours;
-  // Convert an hours component of "0" to "12"
-  currentHours	= ( currentHours == 0 ) ? 12 : currentHours;
- currentCycle = 7;
- currentSchedule = "Basic"
-  // establish the month name
-  if (currentMonth == 01) { currentMonthName = "January" };
-  if (currentMonth == 02) { currentMonthName = "February" };
-  if (currentMonth == 03) { currentMonthName = "March" };
-  if (currentMonth == 04) { currentMonthName = "April" };
-  if (currentMonth == 05) { currentMonthName = "May" };
-  if (currentMonth == 06) { currentMonthName = "June" };
-  if (currentMonth == 07) { currentMonthName = "July" };
-  if (currentMonth == 08) { currentMonthName = "August" };
-  if (currentMonth == 09) { currentMonthName = "September" };
-  if (currentMonth == 10) { currentMonthName = "October" };
-  if (currentMonth == 11) { currentMonthName = "November" };
-  if (currentMonth == 12) { currentMonthName = "December" };
- 
-  // establish the day of the week name
-  if (currentDOW == 0) { currentDayOfWeek = "Sunday" };
-  if (currentDOW == 1) { currentDayOfWeek = "Monday" };
-  if (currentDOW == 2) { currentDayOfWeek = "Tuesday" };
-  if (currentDOW == 3) { currentDayOfWeek = "Wednesday" };
-  if (currentDOW == 4) { currentDayOfWeek = "Thursday" };
-  if (currentDOW == 5) { currentDayOfWeek = "Friday" };
-  if (currentDOW == 6) { currentDayOfWeek = "Saturday" };
- 
- //Calculate time left
-   
+function updateClock()	{
+	var militaryTime = false;
+	var currentTime = new Date();
+	var mon = currentTime.getMonth();
+	var wkday = currentTime.getDay();
+	var date = currentTime.getDate();
+	var yr = currentTime.getFullYear();
+	var hrs = currentTime.getHours();
+	var min = currentTime.getMinutes();
+	var sec = currentTime.getSeconds();
+	var mon = monthToString(mon);
+	var wkday = dayToString(wkday);
+	var min = normalize(min);
+	var sec = normalize(sec);
+	var meridiem = "";
+	var nextEventIndex = 0;
+	if(!militaryTime)	{
+		meridiem = (hrs < 12) ? "AM" : "PM";
+		hrs = (hrs > 12) ? (hrs - 12) : hrs;
+		hrs = (hrs == 0) ? (12) : hrs;
+	}
+	//Determine nextEventIndex
+	while (currentTime > periods[nextEventIndex])	{
+		nextEventIndex ++;
+	}
+	currentCycle = 7;
+	currentSchedule = "Basic"
+	//Calculate time left
 	timeLeft = periods[nextEventIndex] - currentTime;
-	minutesLeft = Math.round(timeLeft/60000);
- 
-  
-  //Calculate next Event period number
-  switch (nextEventIndex)	{
+	minutesLeft = Math.round(timeLeft / 60000);
+	//Calculate next Event period number
+	var word = "";
+	var period = -1;
+	switch (nextEventIndex)	{
 		case 0 : period = 7; word = "start"; break;
 		case 1 : period = 7; word = "end"; break;
 		case 2 : period = 8; word = "start"; break
@@ -174,39 +116,70 @@ nextEventIndex ++;
 		case 13 :period = 3; word = "end"; break;
 		case 14 :period = 4; word = "start"; break;
 		case 15 :period = 4; word = "end"; break;
-	}
-  
-  // Compose the string for display
-  var currentScrollerString = minutesLeft + " minutes to " + word + " of Period " + period;
-  var currentTimeString = currentHours + ":" + currentFormattedMinutes + ":" + currentFormattedSeconds + " " + AMPM;
- var currentCycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule;
-  // Compose the string for display
-  //var currentISODateString = currentFormattedMonth + "-" + currentFormattedDate + "-" + currentYear;
- 
-  // Compose the string for display
-  var currentDateString = currentDayOfWeek + ", " + currentMonthName + " " + currentDate + ", " + currentYear;
- 
-  // Update the time display
-  document.getElementById("Clock").firstChild.nodeValue = currentTimeString;
-  //document.getElementById("ISOcalendar").firstChild.nodeValue = currentISODateString;
-  document.getElementById("calendar").firstChild.nodeValue = currentDateString;
-  //document.getElementById("DayOfWeek").firstChild.nodeValue = currentDayOfWeek;
-  document.getElementById("scroller").firstChild.nodeValue =  currentScrollerString; 
-  document.getElementById("cycleSchedule").firstChild.nodeValue =  currentCycleScheduleString;
-  
+		} 
 
-} 
-// -->
+	var scrollerString = (sec > 1) ? (minutesLeft + " minutes to " + word + " of Period " + period) : (minutesLeft + "minute to " + word + " of Period " + period);
+	var timeString = hrs + ":" + min + ":" + sec + " " + meridiem;
+	var cycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule; 
+	// Compose the string for display
+	var dateString = wkday + ", " + mon + " " + date + ", " + yr;
+
+	// Update the time display
+	document.getElementById("clock").firstChild.nodeValue = timeString;
+	document.getElementById("calendar").firstChild.nodeValue = dateString;
+	document.getElementById("scroller").firstChild.nodeValue =  scrollerString; 
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  cycleScheduleString;
+}
+
+function normalize(time)  {
+	if(time < 10) { time = "0" + time};
+	return time;
+}
+
+function monthToString(month)	{
+	switch (month)	{
+		case 0 : month = "January"; break;
+		case 1 : month = "February"; break;
+		case 2 : month = "March"; break
+		case 3 : month = "April"; break;
+		case 4 : month = "May"; break;
+		case 5 : month = "June"; break;
+		case 6 : month = "July"; break;
+		case 7 : month = "August"; break;
+		case 8 : month = "September"; break;
+		case 9 : month = "October"; break;
+		case 10 : month = "November"; break;
+		case 11 : month = "December"; break;
+	}
+	return month;
+}
+
+function dayToString(day)	{
+	switch(day)	{
+		case 0 : day = "Sunday"; break;
+		case 1 : day = "Monday"; break;
+		case 2 : day = "Tuesday"; break;
+		case 3 : day = "Wednesday"; break;
+		case 4 : day = "Thursday"; break;
+		case 5 : day = "Friday"; break;
+		case 6 : day = "Saturday"; break;
+	}
+	return day;
+}
+
 </script>
-</HEAD>
-<BODY onload='updateClock(); setInterval("updateClock()", 500 )' >
-<TABLE Align="center">
-<TR><TD id="calendar">&nbsp;</TD></TR>
-<TR><TD id="cycleSchedule">&nbsp;</TD></TR>
-<TR><TD id="Clock">&nbsp;</TD></TR>
-<TR><TD id="DayOfWeek">&nbsp;</TD></TR>
-<TR><TD>&nbsp;</TD></TR>
-<TR><TD><marquee behavior="scroll" scrollamount="5" scrolldelay="0" id="scroller">&nbsp;<marquee></TD></TR>
-</TABLE>
-</BODY>
-</HTML>
+</head>
+
+<body onload = 'updateClock(); setInterval("updateClock()", 500)'>
+
+<table align = 'center'>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td id = "calendar">&nbsp;</td></tr>
+<tr><td id = "cycleSchedule">&nbsp;</td></tr>
+<tr><td id = "clock">&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td><marquee behavior = "scroll" scrollAmt = "5" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
+</table>
+</body>
+</html>
