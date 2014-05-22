@@ -94,9 +94,11 @@ function updateClock()	{
 	// Compose the string for display
 	var dateString = wkday + ", " + mon + " " + date + ", " + yr;
 
-
-	document.getElementById('clock').innerHTML = "It is now " + hrs + ":" + min + ":" + sec + " " + meridiem + ".";
-	document.getElementById('calendar').innerHTML = "Today is " + wkday + ", " + mon + " " + date + ", " + yr + ".";
+	// Update the time display
+	document.getElementById("clock").firstChild.nodeValue = timeString;
+	document.getElementById("calendar").firstChild.nodeValue = dateString;
+	document.getElementById("scroller").firstChild.nodeValue =  scrollerString; 
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  cycleScheduleString;
 }
 
 function normalize(time)  {
@@ -143,8 +145,11 @@ function dayToString(day)	{
 <table align = 'center'>
 <tr><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td></tr>
-<tr><td id = "clock";></td></tr>
-<tr><td id = "calendar";></td></tr>
-
+<tr><td id = "calendar">&nbsp;</td></tr>
+<tr><td id = "cycleSchedule">&nbsp;</td></tr>
+<tr><td id = "clock">&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td><marquee behavior = "scroll" scrollAmt = "5" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
+</table>
 </body>
 </html>
