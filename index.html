@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 <title>'Iolani Positron Clock</title>
@@ -27,16 +27,20 @@
 	}
 	#cycleSchedule	{
 		font-size: 5em;
-		color: red;
+		color: yellow;
 		text-align: center;
 	}
 	marquee	{
-		color: red;
-		font-size: 3em;
+		color: yellow;
+		font-size: 10em;
 	}
 </style>
 
 <script type = "text/javascript">
+var host = "iolanidev.github.io";
+if((host == window.location.host) && (window.location.protocol != "https:"))	{
+	window.location.protocol = "https";
+}
 // Load schedule
 var periods = [
 	new Date(2014, 4, 21, 7, 50),
@@ -119,6 +123,7 @@ function updateClock()	{
 		} 
 
 	var scrollerString = (sec > 1) ? (minutesLeft + " minutes to " + word + " of Period " + period) : (minutesLeft + "minute to " + word + " of Period " + period);
+	var scrollerString = (!isNaN(timeLeft)) ? (scrollerString) : ("School's over!");
 	var timeString = hrs + ":" + min + ":" + sec + " " + meridiem;
 	var cycleScheduleString = "Cycle " + currentCycle + " " + currentSchedule; 
 	// Compose the string for display
