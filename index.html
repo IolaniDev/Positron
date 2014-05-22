@@ -92,7 +92,7 @@ function updateClock()	{
 
 	// Update the time display
 	document.getElementById("clock").firstChild.nodeValue    = currentTime.toString(militaryTime? 'HH:mm:ss': 'h:mm:ss TT');
-	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d yyyy');
+	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d, yyyy');
 	document.getElementById("scroller").firstChild.nodeValue =  scrollerString;
 	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + schedule.cycle + " " + schedule.name;
 }
