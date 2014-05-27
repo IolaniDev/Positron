@@ -44,19 +44,86 @@ if((host == window.location.host) && (window.location.protocol != "https:"))	{
 	window.location.protocol = "https";
 }
 
-var militaryTime = false;
-var schedule = {
+var CYCLE_1 = [1,2,3,4,5,6,7,8];
+var CYCLE_7 = [7,8,1,2,5,6,3,4];
+var CYCLE_3 = [3,4,7,8,5,6,1,2];
+
+var CYCLES = [{
+	cycle: 1,
+	order: [1,2,3,4,5,6,7,8]
+},
+{
 	cycle: 7,
-	name: 'Moving Up Chapel',
-	periods: [
-		{ num: 7, start: [8, 25],  end: [9, 05] },
-		{ num: 8, start: [9, 10],  end: [9, 50] },
-		{ num: 1, start: [9, 55],  end: [10, 35] },
-		{ num: 2, start: [10, 40], end: [11, 20] },
-		{ num: 5, start: [11, 25], end: [12, 05] },
-		{ num: 6, start: [12, 50], end: [13, 30] },
-		{ num: 3, start: [13, 35], end: [14, 15] },
-		{ num: 4, start: [14, 20], end: [15, 00] }
+	order: [7,8,1,2,5,6,3,4]
+},
+{
+	cycle: 3,
+	order: [3,4,7,8,5,6,1,2]
+}];
+
+var SCHEDULES = [
+	{
+		name: 'Basic',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 34] },
+		{ num: 1, start: [8, 39],  end: [9, 23] },
+		{ num: 2, start: [9, 28],  end: [10, 12] },
+		{ num: 3, start: [10, 17], end: [11, 01] },
+		{ num: 4, start: [11, 06], end: [11, 50] },
+		{ num: 5, start: [12, 38], end: [13, 22] },
+		{ num: 6, start: [13, 27], end: [14, 11] },
+		{ num: 7, start: [14, 16], end: [15, 00] }]
+	},
+	{
+		name: 'Chapel',
+		periods: [
+		{ num: 0, start: [8, 14],  end: [8, 55] },
+		{ num: 1, start: [9, 00],  end: [9, 41] },
+		{ num: 2, start: [9, 46],  end: [10, 27] },
+		{ num: 3, start: [10, 32], end: [11, 13] },
+		{ num: 4, start: [11, 18], end: [11, 59] },
+		{ num: 5, start: [12, 38], end: [13, 22] },
+		{ num: 6, start: [13, 27], end: [14, 11] },
+		{ num: 7, start: [14, 16], end: [15, 00] }]
+	},
+	{
+		name: 'Assembly 1',
+		periods: [
+		{ num: 0, start: [8, 39],  end: [9, 18] },
+		{ num: 1, start: [9, 23],  end: [10, 02] },
+		{ num: 2, start: [10, 07],  end: [10, 46] },
+		{ num: 3, start: [10, 51], end: [11, 30] },
+		{ num: 4, start: [11, 35], end: [12, 14] },
+		{ num: 5, start: [12, 53], end: [13, 32] },
+		{ num: 6, start: [13, 37], end: [14, 16] },
+		{ num: 7, start: [14, 21], end: [15, 00] }]
+	},
+	{
+		name: 'Assembly 3',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 29] },
+		{ num: 1, start: [8, 34],  end: [9, 13] },
+		{ num: 2, start: [9, 18],  end: [9, 57] },
+		{ num: 3, start: [10, 02], end: [10, 41] },
+		{ num: 4, start: [10, 46], end: [11, 25] },
+		{ num: 5, start: [11, 30], end: [12, 09] },
+		{ num: 6, start: [12, 49], end: [13, 28] },
+		{ num: 7, start: [13, 33], end: [14, 12] }]
+	},
+	{
+		name: 'Variety/Athletic',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 26] },
+		{ num: 1, start: [8, 31],  end: [9, 07] },
+		{ num: 2, start: [9, 12],  end: [9, 48] },
+		{ num: 3, start: [9, 53], end: [10, 29] },
+		{ num: 4, start: [10, 34], end: [11, 10] },
+		{ num: 5, start: [13, 02], end: [13, 38] },
+		{ num: 6, start: [13, 43], end: [14, 19] },
+		{ num: 7, start: [14, 24], end: [15, 00] }]
+	}];
+
+var militaryTime = false;
 	]
 };
 
