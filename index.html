@@ -44,21 +44,112 @@ if((host == window.location.host) && (window.location.protocol != "https:"))	{
 	window.location.protocol = "https";
 }
 
-var militaryTime = false;
-var schedule = {
+var CYCLE_1 = [1,2,3,4,5,6,7,8];
+var CYCLE_7 = [7,8,1,2,5,6,3,4];
+var CYCLE_3 = [3,4,7,8,5,6,1,2];
+
+var CYCLES = [{
+	cycle: 1,
+	order: [1,2,3,4,5,6,7,8]
+},
+{
 	cycle: 7,
-	name: 'Basic',
-	periods: [
-		{ num: 7, start: [7, 50],  end: [8, 34] },
-		{ num: 8, start: [8, 39],  end: [9, 23] },
-		{ num: 1, start: [9, 28],  end: [10, 12] },
-		{ num: 2, start: [10, 17], end: [11, 01] },
-		{ num: 5, start: [11, 06], end: [11, 50] },
-		{ num: 6, start: [12, 38], end: [13, 22] },
-		{ num: 3, start: [13, 27], end: [14, 11] },
-		{ num: 4, start: [14, 16], end: [15, 00] }
+	order: [7,8,1,2,5,6,3,4]
+},
+{
+	cycle: 3,
+	order: [3,4,7,8,5,6,1,2]
+}];
+
+var SCHEDULES = [
+	{
+		name: 'Basic',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 34] },
+		{ num: 1, start: [8, 39],  end: [9, 23] },
+		{ num: 2, start: [9, 28],  end: [10, 12] },
+		{ num: 3, start: [10, 17], end: [11, 01] },
+		{ num: 4, start: [11, 06], end: [11, 50] },
+		{ num: 5, start: [12, 38], end: [13, 22] },
+		{ num: 6, start: [13, 27], end: [14, 11] },
+		{ num: 7, start: [14, 16], end: [15, 00] }]
+	},
+	{
+		name: 'Chapel',
+		periods: [
+		{ num: 0, start: [8, 14],  end: [8, 55] },
+		{ num: 1, start: [9, 00],  end: [9, 41] },
+		{ num: 2, start: [9, 46],  end: [10, 27] },
+		{ num: 3, start: [10, 32], end: [11, 13] },
+		{ num: 4, start: [11, 18], end: [11, 59] },
+		{ num: 5, start: [12, 38], end: [13, 22] },
+		{ num: 6, start: [13, 27], end: [14, 11] },
+		{ num: 7, start: [14, 16], end: [15, 00] }]
+	},
+	{
+		name: 'Assembly 1',
+		periods: [
+		{ num: 0, start: [8, 39],  end: [9, 18] },
+		{ num: 1, start: [9, 23],  end: [10, 02] },
+		{ num: 2, start: [10, 07],  end: [10, 46] },
+		{ num: 3, start: [10, 51], end: [11, 30] },
+		{ num: 4, start: [11, 35], end: [12, 14] },
+		{ num: 5, start: [12, 53], end: [13, 32] },
+		{ num: 6, start: [13, 37], end: [14, 16] },
+		{ num: 7, start: [14, 21], end: [15, 00] }]
+	},
+	{
+		name: 'Assembly 3',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 29] },
+		{ num: 1, start: [8, 34],  end: [9, 13] },
+		{ num: 2, start: [9, 18],  end: [9, 57] },
+		{ num: 3, start: [10, 02], end: [10, 41] },
+		{ num: 4, start: [10, 46], end: [11, 25] },
+		{ num: 5, start: [11, 30], end: [12, 09] },
+		{ num: 6, start: [12, 49], end: [13, 28] },
+		{ num: 7, start: [13, 33], end: [14, 12] }]
+	},
+	{
+		name: 'Variety/Athletic',
+		periods: [
+		{ num: 0, start: [7, 50],  end: [8, 26] },
+		{ num: 1, start: [8, 31],  end: [9, 07] },
+		{ num: 2, start: [9, 12],  end: [9, 48] },
+		{ num: 3, start: [9, 53], end: [10, 29] },
+		{ num: 4, start: [10, 34], end: [11, 10] },
+		{ num: 5, start: [13, 02], end: [13, 38] },
+		{ num: 6, start: [13, 43], end: [14, 19] },
+		{ num: 7, start: [14, 24], end: [15, 00] }]
+	}];
+
+var militaryTime = false;
+var thisWeek = {
+	cycle: 3,
+	startDate: new XDate('2014-05-26'),
+	schedule: [
+		null, 'Assembly 1', 'Variety/Athletic', 'Assembly 1', 'Basic'
 	]
 };
+
+function scheduleForDay(xdate)  {
+	if(xdate == null < thisWeek.startDate.diffDays(xdate) < 0)
+		return {name: 'No School!', schedule: []};
+	var schedString = thisWeek.schedule[Math.floor(thisWeek.startDate.diffDays(xdate))]; // sets schedString based on the difference between the start of the week and the current day (e.g. Monday returns 0, Tuesday returns 1, etc. //
+	for(var i = 0; i < SCHEDULES.length; i ++)	{
+		if(schedString == SCHEDULES[i].name)
+			return SCHEDULES[i];
+	}
+	return {name: 'No School!', schedule: []};
+}
+
+function getCycleObject(cycle)	{
+	for(var i = 0; i < CYCLES.length; i ++)	{
+		if(cycle == CYCLES[i].cycle)
+			return CYCLES[i].order;
+	}
+	return null;
+}
 
 function updateClock()	{
 	var currentTime = new XDate();
@@ -66,18 +157,22 @@ function updateClock()	{
 	var word = 'start';
 	// nextTime is the start of the next event (tomorrow) //
 	var nextTime = currentTime.clone();
+	var schedule = scheduleForDay(currentTime);
+	var perNum;
 	for(var i = 0; i < schedule.periods.length; i++) {
 		period = schedule.periods[i];
 		// before the start of a period? //
 		if(compareDate(currentTime, period.start) > 0) {
 			nextTime.setHours(period.start[0]);
 			nextTime.setMinutes(period.start[1]);
+			perNum = i;
 			break;
 		}
 		// before the end of a period? //
 		if(compareDate(currentTime, period.end) > 0) {
 			nextTime.setHours(period.end[0]);
 			nextTime.setMinutes(period.end[1]);
+			perNum = i;
 			word = 'end';
 			break;
 		}
@@ -87,14 +182,14 @@ function updateClock()	{
 	if(mins == 0) {
 		scrollerString = 'School is not currently in session!'
 	} else {
-		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' to the ' + word + ' of period ' + period.num;
+		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until period ' + getCycleObject(thisWeek.cycle)[perNum] + ' ' + word + 's.';
 	}
 
 	// Update the time display
 	document.getElementById("clock").firstChild.nodeValue    = currentTime.toString(militaryTime? 'HH:mm:ss': 'h:mm:ss TT');
 	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d, yyyy');
 	document.getElementById("scroller").firstChild.nodeValue =  scrollerString;
-	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + schedule.cycle + " " + schedule.name;
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + thisWeek.cycle + " " + schedule.name;
 }
 
 function compareDate(xdate, dparts) {
@@ -116,7 +211,7 @@ function compareDate(xdate, dparts) {
 	<tr><td id="cycleSchedule">&nbsp;</td></tr>
 	<tr><td id="clock">&nbsp;</td></tr>
 	<tr><td>&nbsp;</td></tr>
-	<tr><td><marquee behavior = "scroll" scrollAmt = "5" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
+	<tr><td><marquee behavior = "scroll" scrollAmt = "10" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
   </table>
 </body>
 </html>
