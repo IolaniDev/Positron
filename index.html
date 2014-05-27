@@ -143,6 +143,14 @@ function scheduleForDay(xdate)  {
 	return {name: 'No School!', schedule: []};
 }
 
+function getCycleObject(cycle)	{
+	for(var i = 0; i < CYCLES.length; i ++)	{
+		if(cycle == CYCLES[i].cycle)
+			return CYCLES[i].order;
+	}
+	return null;
+}
+
 function updateClock()	{
 	var currentTime = new XDate();
 	
