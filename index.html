@@ -132,6 +132,17 @@ var thisWeek = {
 	]
 };
 
+function scheduleForDay(xdate)  {
+	if(xdate == null < thisWeek.startDate.diffDays(xdate) < 0)
+		return {name: 'No School!', schedule: []};
+	var schedString = thisWeek.schedule[Math.floor(thisWeek.startDate.diffDays(xdate))]; // sets schedString based on the difference between the start of the week and the current day (e.g. Monday returns 0, Tuesday returns 1, etc. //
+	for(var i = 0; i < SCHEDULES.length; i ++)	{
+		if(schedString == SCHEDULES[i].name)
+			return SCHEDULES[i];
+	}
+	return {name: 'No School!', schedule: []};
+}
+
 function updateClock()	{
 	var currentTime = new XDate();
 	
