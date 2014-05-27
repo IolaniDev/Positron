@@ -157,18 +157,22 @@ function updateClock()	{
 	var word = 'start';
 	// nextTime is the start of the next event (tomorrow) //
 	var nextTime = currentTime.clone();
+	var schedule = scheduleForDay(currentTime);
+	var perNum;
 	for(var i = 0; i < schedule.periods.length; i++) {
 		period = schedule.periods[i];
 		// before the start of a period? //
 		if(compareDate(currentTime, period.start) > 0) {
 			nextTime.setHours(period.start[0]);
 			nextTime.setMinutes(period.start[1]);
+			perNum = i;
 			break;
 		}
 		// before the end of a period? //
 		if(compareDate(currentTime, period.end) > 0) {
 			nextTime.setHours(period.end[0]);
 			nextTime.setMinutes(period.end[1]);
+			perNum = i;
 			word = 'end';
 			break;
 		}
@@ -178,14 +182,14 @@ function updateClock()	{
 	if(mins == 0) {
 		scrollerString = 'School is not currently in session!'
 	} else {
-		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' to the ' + word + ' of period ' + period.num;
+		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until period ' + getCycleObject(thisWeek.cycle)[perNum] + ' ' + word + 's.';
 	}
 
 	// Update the time display
 	document.getElementById("clock").firstChild.nodeValue    = currentTime.toString(militaryTime? 'HH:mm:ss': 'h:mm:ss TT');
 	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d, yyyy');
 	document.getElementById("scroller").firstChild.nodeValue =  scrollerString;
-	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + schedule.cycle + " " + schedule.name;
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + thisWeek.cycle + " " + schedule.name;
 }
 
 function compareDate(xdate, dparts) {
