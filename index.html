@@ -132,6 +132,56 @@ var thisWeek = {
 	]
 };
 
+var displayMode = 'time';
+var timerSeconds = 0;
+var timerRunning = false;
+document.addEventListener('keydown', function(event)	{
+	switch(event.keyCode)	{
+		case 37: // left arrow //
+			displayMode = 'time';
+			break;
+		case 39: // right arrow //
+			displayMode = 'countdown';
+			break;
+		case 38: // up arrow // 
+			if(timerSeconds < (24 * 60 -1) * 60)	{
+				var rem = timerSeconds % 60;
+				if(rem !=0)	{
+					timerSeconds -= rem;
+				}
+				timerSeconds += 60;
+			}
+			timerRunning = false;
+			break;
+		case 40: // down arrow //
+			if(timerSeconds >= 0)	{
+				var rem = timerSeconds % 60;
+				if(rem != 0)	{
+					timerSeconds -= rem;
+				}
+				else	{
+					timerSeconds -= 60;
+				}
+			}
+			else 	{
+				timerSeconds =0;
+			}
+			timerRunning = false;
+			break;
+		case 13: // enter //
+			timerRunning = !timerRunning;
+			break;
+	}
+	event.stopPropagation();
+	event.preventDefault();
+});
+
+window.setInterval(function()	{
+	if(displayMode == 'countdown' && timerRunning && timerSeconds > 0)	{
+		timerSeconds--;
+	}
+}, 1000);
+
 function scheduleForDay(xdate)  {
 	if(xdate == null < thisWeek.startDate.diffDays(xdate) < 0)
 		return {name: 'No School!', schedule: []};
@@ -186,7 +236,20 @@ function updateClock()	{
 	}
 
 	// Update the time display
-	document.getElementById("clock").firstChild.nodeValue    = currentTime.toString(militaryTime? 'HH:mm:ss': 'h:mm:ss TT');
+
+	var time;
+	switch(displayMode)	{
+		case 'time':
+			time = currentTime.toString(militaryTime? 'HH:mm:ss': 'h:mm:ss TT');
+			break;
+		case 'countdown':
+			var delta = new XDate('1900-01-01 00:00:00');
+			delta.addSeconds(timerSeconds);
+			time = delta.toString('HH:mm:ss');
+			break;
+	}
+
+	document.getElementById("clock").firstChild.nodeValue    = time;
 	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d, yyyy');
 	document.getElementById("scroller").firstChild.nodeValue =  scrollerString;
 	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + thisWeek.cycle + " " + schedule.name;
@@ -211,7 +274,7 @@ function compareDate(xdate, dparts) {
 	<tr><td id="cycleSchedule">&nbsp;</td></tr>
 	<tr><td id="clock">&nbsp;</td></tr>
 	<tr><td>&nbsp;</td></tr>
-	<tr><td><marquee behavior = "scroll" scrollAmt = "10" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
+	<tr><td><marquee behavior = "scroll" scrollAmt = "20" scrollDelay = "0" id = "scroller">&nbsp;</marquee></td></tr>
   </table>
 </body>
 </html>
