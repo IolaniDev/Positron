@@ -124,6 +124,10 @@ var SCHEDULES = [
 		{ num: 5, start: [13, 02], end: [13, 38] },
 		{ num: 6, start: [13, 43], end: [14, 19] },
 		{ num: 7, start: [14, 24], end: [15, 00] }]
+	},
+	{
+		name: 'No School!',
+		periods: []
 	}];
 
 var militaryTime = false;
@@ -187,13 +191,13 @@ window.setInterval(function()	{
 
 function scheduleForDay(xdate)  {
 	if(xdate == null < thisWeek.startDate.diffDays(xdate) < 0)
-		return {name: 'No School!', schedule: []};
+		return {name: 'No School!', periods: []};
 	var schedString = thisWeek.schedule[Math.floor(thisWeek.startDate.diffDays(xdate))]; // sets schedString based on the difference between the start of the week and the current day (e.g. Monday returns 0, Tuesday returns 1, etc. //
 	for(var i = 0; i < SCHEDULES.length; i ++)	{
 		if(schedString == SCHEDULES[i].name)
 			return SCHEDULES[i];
 	}
-	return {name: 'No School!', schedule: []};
+	return {name: 'No School!', periods: []};
 }
 
 function getCycleObject(cycle)	{
