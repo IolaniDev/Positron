@@ -59,6 +59,13 @@ var CYCLES = [{
 
 var SCHEDULES = [
 	{
+		name: 'Summer School',
+		periods: [
+		{ num: 0, start: [7, 45],  end: [9, 45] },
+		{ num: 1, start: [10, 15],  end: [12, 15] },
+		{ num: 2, start: [1, 15],  end: [3, 15] }]
+	},
+	{
 		name: 'Basic',
 		periods: [
 		{ num: 0, start: [7, 50],  end: [8, 34] },
@@ -121,10 +128,10 @@ var SCHEDULES = [
 
 var militaryTime = false;
 var thisWeek = {
-	cycle: 3,
-	startDate: new XDate('2014-05-26'),
+	cycle: null,
+	startDate: new XDate('2014-06-16'),
 	schedule: [
-		null, 'Assembly 1', 'Variety/Athletic', 'Assembly 1', 'Basic'
+		'Summer School', 'Summer School', 'Summer School', 'Summer School', 'Summer School'
 	]
 };
 
@@ -226,9 +233,9 @@ function updateClock()	{
 	}
 	var mins = currentTime.diffMinutes(nextTime);
 	if(mins == 0) {
-		scrollerString = 'School is not currently in session!'
+		scrollerString = 'School is not currently in session!';
 	} else {
-		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until ' + word + ' of period ' + getCycleObject(thisWeek.cycle)[perNum] + '.';
+		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until ' + word + ' of period' + (thisWeek.cycle == null)? (''): (getCycleObject(thisWeek.cycle)[perNum]) + '.';
 	}
 
 	// Update the time display
@@ -248,7 +255,7 @@ function updateClock()	{
 	document.getElementById("clock").firstChild.nodeValue    = time;
 	document.getElementById("calendar").firstChild.nodeValue = currentTime.toString('dddd, MMMM d, yyyy');
 	document.getElementById("scroller").firstChild.nodeValue =  scrollerString;
-	document.getElementById("cycleSchedule").firstChild.nodeValue =  "Cycle " + thisWeek.cycle + " " + schedule.name;
+	document.getElementById("cycleSchedule").firstChild.nodeValue =  (thisWeek.cycle != null)? ("Cycle " + thisWeek.cycle + " "): ("") + schedule.name;
 }
 
 function compareDate(xdate, dparts) {
