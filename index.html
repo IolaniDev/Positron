@@ -239,7 +239,7 @@ function updateClock()	{
 	if(mins == 0) {
 		scrollerString = 'School is not currently in session!';
 	} else {
-		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until the ' + word + ' of ' + ((thisWeek.cycle != null)? ('period' + getCycleObject(thisWeek.cycle)[perNum]):('class'))  + '.';
+		scrollerString =  mins + ' minute' + (mins > 1 ? 's': '') + ' until ' + ((thisWeek.cycle != null)? ('period ' + getCycleObject(thisWeek.cycle)[perNum]):('class'))  + ' ' + word +'s.';
 	}
 
 	// Update the time display
