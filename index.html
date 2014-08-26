@@ -90,6 +90,14 @@ var SCHEDULES = [
 		{ num: 7, start: [14, 16], end: [15, 00] }]
 	},
 	{
+		name: 'Extended',
+		periods: [
+		{ num: 0, start: [8, 15],  end: [9, 25] },
+		{ num: 1, start: [9, 30],  end: [10, 40] },
+		{ num: 2, start: [12, 35],  end: [13, 45] },
+		{ num: 3, start: [13, 50], end: [15, 00] }]
+	},
+	{
 		name: 'Assembly 1',
 		periods: [
 		{ num: 0, start: [8, 39],  end: [9, 18] },
@@ -206,7 +214,7 @@ function scheduleForDay(xdate)  {
 		return {name: 'No School!', periods: []};
 	var schedString = thisWeek.schedule[Math.floor(thisWeek.startDate.diffDays(xdate))]; // sets schedString based on the difference between the start of the week and the current day (e.g. Monday returns 0, Tuesday returns 1, etc. //
 	for(var i = 0; i < SCHEDULES.length; i ++)	{
-		if(schedString == SCHEDULES[i].name)
+		if(schedString == SCHEDULES[i].name || schedString.indexOf('Extended') != -1)
 			return SCHEDULES[i];
 	}
 	return {name: 'No School!', periods: []};
@@ -228,7 +236,12 @@ function updateClock()	{
 	var nextTime = currentTime.clone();
 	var schedule = scheduleForDay(currentTime);
 	var perNum;
-	for(var i = 0; i < schedule.periods.length; i++) {
+	var nextPer;
+	(schedule.name.indexOf("Extended") != -1)? nextPer = 2 : nextPer = 1;
+	for(var i = 0; i < schedule.periods.length; i += nextPer) {
+		if(nextPer == 2 && schedule.name.indexOf("(2,4,6,8)") != -1)	{
+			i++;
+		}
 		period = schedule.periods[i];
 		// before the start of a period? //
 		if(compareDate(currentTime, period.start) > 0) {
